@@ -8,18 +8,22 @@ import {
 
 export class CreateUserDto {
   @IsString()
+  @IsNotEmpty()
   userName: string;
 
   @IsString()
+  @IsNotEmpty()
   password: string;
 
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @IsNumber()
+  @IsNotEmpty()
   age: number;
 
-  @IsNotEmpty()
   @IsBoolean()
+  @IsNotEmpty()
   isActive: boolean;
 }

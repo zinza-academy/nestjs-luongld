@@ -1,9 +1,11 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { PagingUserDto } from './dto/paging-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { PagingResponse } from 'src/common/type/pagingResponse.interface';
 
 @Injectable()
 export class UserService {
@@ -26,12 +28,18 @@ export class UserService {
     return user;
   }
 
-  async findAll(): Promise<User[]> {
-    const users = await this.usersRepository.find();
-    return users;
+  async findAll(query: PagingUserDto) {
+    const limit: number = +query.limit || 5;
+    const page: number = +query.page || 1;
+    const skip: number = limit * (page - 1);
+    const [users, count] = await this.usersRepository.findAndCount({
+      skip: skip,
+      take: limit,
+    });
+    return new PagingResponse(users, count, page, limit);
   }
 
-  async findOne(id: number) {
+  async findOneById(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id: id },
     });
@@ -39,11 +47,8 @@ export class UserService {
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.usersRepository.findOne({
-      where: { id: id },
-    });
-    if (!user) throw new HttpException('Người dùng không tồn tại', 400);
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.findOneById(id);
     await this.usersRepository
       .createQueryBuilder()
       .update(User)
@@ -54,11 +59,8 @@ export class UserService {
     return user;
   }
 
-  async remove(id: number) {
-    const user = await this.usersRepository.findOne({
-      where: { id: id },
-    });
-    if (!user) throw new HttpException('Người dùng không tồn tại', 400);
+  async remove(id: number): Promise<User> {
+    const user = await this.findOneById(id);
     await this.usersRepository
       .createQueryBuilder()
       .delete()

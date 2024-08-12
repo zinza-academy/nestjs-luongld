@@ -9,13 +9,18 @@ import {
   ParseIntPipe,
   UsePipes,
   ValidationPipe,
+  Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PagingUserDto } from './dto/paging-user.dto';
+import { ResponseInterceptor } from 'src/common/interceptor/response.interceptor';
 
 @Controller('user')
 @UsePipes(ValidationPipe)
+@UseInterceptors(ResponseInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -25,13 +30,13 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  findAll(@Query() query: PagingUserDto) {
+    return this.userService.findAll(query);
   }
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findOne(id);
+    return this.userService.findOneById(id);
   }
 
   @Patch(':id')
