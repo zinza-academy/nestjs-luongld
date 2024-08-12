@@ -5,7 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { PagingUserDto } from './dto/paging-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { PagingResponse } from 'src/common/type/pagingResponse.interface';
+import { PagingResponse } from 'src/common/type/pagingResponse.class';
 
 @Injectable()
 export class UserService {

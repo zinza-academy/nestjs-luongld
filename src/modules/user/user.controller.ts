@@ -11,16 +11,19 @@ import {
   ValidationPipe,
   Query,
   UseInterceptors,
+  UseFilters,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PagingUserDto } from './dto/paging-user.dto';
 import { ResponseInterceptor } from 'src/common/interceptor/response.interceptor';
+import { HttpExceptionFilter } from 'src/common/exception/http-exception.filter';
 
 @Controller('user')
 @UsePipes(ValidationPipe)
 @UseInterceptors(ResponseInterceptor)
+@UseFilters(HttpExceptionFilter)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PagingResponse } from '../type/pagingResponse.interface';
+import { PagingResponse } from '../type/pagingResponse.class';
 
 @Injectable()
 export class ResponseInterceptor implements NestInterceptor {
