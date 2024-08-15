@@ -13,9 +13,9 @@ export const options: DataSourceOptions = {
   password: configService.get('DB_PASSWORD'),
   database: configService.get('DB_NAME'),
   entities: ['dist/**/*.entity{.ts,.js}'],
-  migrations: ['dist/migrations/*{.ts,.js}'],
+  migrations: ['dist/db/migrations/*{.ts,.js}'],
+  migrationsTableName: 'custom_migration_table',
   synchronize: false,
 };
-console.log('options orm', options);
 
 export const dataSourceOptions = new DataSource(options);

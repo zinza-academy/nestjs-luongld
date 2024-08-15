@@ -14,9 +14,6 @@ export class User {
   @Column()
   email: string;
 
-  @Column()
-  age: number;
-
   @Column({ default: true })
   isActive: boolean;
 }
