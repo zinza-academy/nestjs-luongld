@@ -74,9 +74,4 @@ export class ImportExcelService {
     }
     console.log('Import ward success!');
   }
-
-  async findAllProvince() {
-    const province = await this.provinceRepository.find();
-    return province;
-  }
 }
