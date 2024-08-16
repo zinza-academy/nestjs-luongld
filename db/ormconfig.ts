@@ -12,7 +12,7 @@ export const options: DataSourceOptions = {
   username: configService.get('DB_USERNAME'),
   password: configService.get('DB_PASSWORD'),
   database: configService.get('DB_NAME'),
-  entities: ['dist/**/*.entity{.ts,.js}'],
+  entities: [__dirname + '/../**/*.entity.{js,ts}'],
   migrations: ['dist/db/migrations/*{.ts,.js}'],
   migrationsTableName: 'custom_migration_table',
   synchronize: false,
