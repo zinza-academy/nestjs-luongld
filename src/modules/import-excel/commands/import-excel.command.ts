@@ -1,4 +1,4 @@
-import { Command, CommandRunner, Option } from 'nest-commander';
+import { Command, CommandRunner } from 'nest-commander';
 import * as ExcelJS from 'exceljs';
 import { ImportExcelService } from '../import-excel.service';
 import * as path from 'path';
@@ -12,10 +12,7 @@ export class ImportExcelCommand extends CommandRunner {
   constructor(private readonly importExcelService: ImportExcelService) {
     super();
   }
-  async run(
-    passedParams: string[],
-    options?: Record<string, any>,
-  ): Promise<void> {
+  async run(): Promise<void> {
     const provinceFilePath = path.join(
       process.cwd(),
       'uploads/excel/province.xlsx',
@@ -88,13 +85,5 @@ export class ImportExcelCommand extends CommandRunner {
     await this.importExcelService.importProvince(provinces);
     await this.importExcelService.importDistrict(districts);
     await this.importExcelService.importWard(wards);
-  }
-
-  @Option({
-    flags: '-f, --file [path]',
-    description: 'Path to the Excel file',
-  })
-  parseFile(val: string): string {
-    return val;
   }
 }

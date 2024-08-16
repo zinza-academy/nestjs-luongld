@@ -36,8 +36,16 @@ export class ImportExcelService {
 
     for (let i = 0; i < dataSize; i += pagingSize) {
       const data = districtImportData.slice(i, i + pagingSize);
-
-      await this.districtRepository.insert(data);
+      const districtInsert = data.map(async (district) => {
+        const province = await this.provinceRepository.findOne({
+          where: { id: district.provinceId },
+        });
+        return {
+          ...district,
+          province,
+        };
+      });
+      await this.districtRepository.insert(await Promise.all(districtInsert));
     }
     console.log('Import district success!');
   }
@@ -48,9 +56,27 @@ export class ImportExcelService {
 
     for (let i = 0; i < dataSize; i += pagingSize) {
       const data = wardImportData.slice(i, i + pagingSize);
+      const wardInsert = data.map(async (ward) => {
+        const province = await this.provinceRepository.findOne({
+          where: { id: ward.provinceId },
+        });
+        const district = await this.districtRepository.findOne({
+          where: { id: ward.districtId },
+        });
+        return {
+          ...ward,
+          province,
+          district,
+        };
+      });
 
-      await this.wardRepository.insert(data);
+      await this.wardRepository.insert(await Promise.all(wardInsert));
     }
     console.log('Import ward success!');
+  }
+
+  async findAllProvince() {
+    const province = await this.provinceRepository.find();
+    return province;
   }
 }
