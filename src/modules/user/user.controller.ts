@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -17,6 +18,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { PagingUserDto } from './dto/paging-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
+import { JwtAuthGuard } from '@modules/auth/guard/jwt-auth.guard';
 
 @Controller('user')
 @UsePipes(ValidationPipe)
@@ -29,6 +31,7 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@Query() query: PagingUserDto) {
     return this.userService.findAll(query);
