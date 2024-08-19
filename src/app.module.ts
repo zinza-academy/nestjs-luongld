@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { ImportExcelModule } from './modules/import-excel/import-excel.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ImportExcelModule } from './modules/import-excel/import-excel.module';
     TypeOrmModule.forRoot(options),
     UserModule,
     ImportExcelModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
