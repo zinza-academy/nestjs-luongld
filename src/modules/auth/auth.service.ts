@@ -20,12 +20,11 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
+  async login(user) {
     const payload = { id: user.id, username: user.userName };
-
     const jwtOptions = {
-      expiresIn: '20m',
-      secret: process.env.SECRET_KEY,
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRE,
+      secret: process.env.ACCESS_TOKEN_SECRET,
     };
     return {
       access_token: await this.jwtService.signAsync(payload, jwtOptions),

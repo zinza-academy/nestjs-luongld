@@ -1,3 +1,4 @@
+import { JwtAuthGuard } from '@modules/auth/guard/jwt-auth.guard';
 import {
   Body,
   Controller,
@@ -9,20 +10,16 @@ import {
   Post,
   Query,
   UseGuards,
-  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ResponseInterceptor } from 'src/common/interceptor/response.interceptor';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PagingUserDto } from './dto/paging-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
-import { JwtAuthGuard } from '@modules/auth/guard/jwt-auth.guard';
 
 @Controller('user')
 @UsePipes(ValidationPipe)
-@UseInterceptors(ResponseInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
