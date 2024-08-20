@@ -3,6 +3,8 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { Response } from 'express';
+import { Auth } from './enum/auth.enum';
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -11,7 +13,7 @@ export class AuthController {
   @Post('login')
   async login(@Request() req, @Res({ passthrough: true }) res: Response) {
     const { access_token } = await this.authService.login(req.user);
-    res.cookie('access_token', access_token, {
+    res.cookie(Auth.ACCESS_TOKEN, access_token, {
       httpOnly: true,
       maxAge: 30 * 60 * 1000,
     });
