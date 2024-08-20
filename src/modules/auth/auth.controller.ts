@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
 import { Auth } from './enum/auth.enum';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { SignUpDto } from './dto/signUp.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -27,5 +28,10 @@ export class AuthController {
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie(Auth.ACCESS_TOKEN);
     return 'logout success';
+  }
+
+  @Post('register')
+  register(@Body() signUpDto: SignUpDto) {
+    return this.authService.register(signUpDto);
   }
 }

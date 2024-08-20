@@ -1,12 +1,12 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
+import { PagingResponse } from 'src/common/type/pagingResponse.class';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PagingUserDto } from './dto/paging-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { PagingResponse } from 'src/common/type/pagingResponse.class';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -15,7 +15,7 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<string> {
+  async create(createUserDto: CreateUserDto) {
     const user = await this.usersRepository.findOne({
       where: { userName: createUserDto.userName },
     });
@@ -27,7 +27,7 @@ export class UserService {
       .into(User)
       .values({ ...createUserDto, password: hashPassword })
       .execute();
-    return 'create user success!';
+    return { message: 'create user success!' };
   }
 
   async findAll(query: PagingUserDto) {
