@@ -1,29 +1,25 @@
+import { JwtAuthGuard } from '@modules/auth/guard/jwt-auth.guard';
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
   ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
-  Query,
-  UseInterceptors,
-  UseFilters,
 } from '@nestjs/common';
-import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { PagingUserDto } from './dto/paging-user.dto';
-import { ResponseInterceptor } from 'src/common/interceptor/response.interceptor';
-import { HttpExceptionFilter } from 'src/common/exception/http-exception.filter';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserService } from './user.service';
 
 @Controller('user')
 @UsePipes(ValidationPipe)
-@UseInterceptors(ResponseInterceptor)
-@UseFilters(HttpExceptionFilter)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -32,6 +28,7 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@Query() query: PagingUserDto) {
     return this.userService.findAll(query);

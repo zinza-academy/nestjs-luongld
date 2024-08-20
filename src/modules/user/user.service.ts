@@ -6,6 +6,7 @@ import { PagingUserDto } from './dto/paging-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { PagingResponse } from 'src/common/type/pagingResponse.class';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -14,18 +15,19 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<string> {
     const user = await this.usersRepository.findOne({
       where: { userName: createUserDto.userName },
     });
     if (user) throw new HttpException('Tên người dùng đã tồn tại', 400);
+    const hashPassword = await bcrypt.hash(createUserDto.password, 10);
     await this.usersRepository
       .createQueryBuilder()
       .insert()
       .into(User)
-      .values(createUserDto)
+      .values({ ...createUserDto, password: hashPassword })
       .execute();
-    return user;
+    return 'create user success!';
   }
 
   async findAll(query: PagingUserDto) {
@@ -42,6 +44,14 @@ export class UserService {
   async findOneById(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id: id },
+    });
+    if (!user) throw new HttpException('Người dùng không tồn tại', 400);
+    return user;
+  }
+
+  async findOneByName(userName: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { userName: userName },
     });
     if (!user) throw new HttpException('Người dùng không tồn tại', 400);
     return user;
