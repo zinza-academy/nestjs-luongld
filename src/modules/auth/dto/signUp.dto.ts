@@ -1,5 +1,6 @@
 import {
   IsDateString,
+  IsEmail,
   IsNotEmpty,
   IsNumber,
   IsString,
@@ -11,7 +12,7 @@ export class SignUpDto {
   @IsNotEmpty({ message: 'Họ tên không được để trống' })
   userName: string;
 
-  @IsString()
+  @IsEmail()
   @IsNotEmpty({ message: 'Email không được để trống' })
   email: string;
 
