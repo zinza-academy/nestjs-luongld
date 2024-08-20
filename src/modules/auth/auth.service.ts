@@ -1,5 +1,5 @@
 import { UserService } from '@modules/user/user.service';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
@@ -17,10 +17,13 @@ export class AuthService {
       const { password, ...result } = user;
       return result;
     }
-    return null;
+    throw new HttpException(
+      'Thông tin đăng nhập không chính xác!',
+      HttpStatus.BAD_REQUEST,
+    );
   }
 
-  async login(user) {
+  async login(user: any) {
     const payload = { id: user.id, username: user.userName };
     const jwtOptions = {
       expiresIn: process.env.ACCESS_TOKEN_EXPIRE,

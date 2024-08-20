@@ -23,10 +23,7 @@ export class ResponseInterceptor implements NestInterceptor {
             data: data.data,
             paging,
           };
-        } else
-          return {
-            data: data,
-          };
+        } else return data;
       }),
     );
   }
