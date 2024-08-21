@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +16,7 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private mailService: MailerService,
   ) {}
 
   async validateUser(signInDto: SignInDto): Promise<any> {
