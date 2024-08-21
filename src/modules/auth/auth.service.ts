@@ -1,15 +1,16 @@
 import { User } from '@modules/user/entities/user.entity';
 import { UserService } from '@modules/user/user.service';
+import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
+import { ForgotPasswordDto } from './dto/forgotPassword.dto';
+import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';
-import { MailerService } from '@nestjs-modules/mailer';
 import { MailOptions } from './types/mailOptions';
-import { ForgotPasswordDto } from './dto/forgotPassword.dto';
 
 @Injectable()
 export class AuthService {
@@ -97,7 +98,7 @@ export class AuthService {
       to: forgotPasswordDto.email,
       subject: 'Đặt lại mật khẩu',
       username: user.userName,
-      resetPasswordUrl: `${process.env.BASE_URL}/validate-reset-token?token=${resetPasswordToken}`,
+      resetPasswordUrl: `${process.env.BASE_URL}/reset-password?token=${resetPasswordToken}`,
     };
     await this.sendMailForgotPassword(mailOptions);
 
@@ -125,5 +126,24 @@ export class AuthService {
     } catch (error) {
       return false;
     }
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const inValid = await this.validateResetPasswordToken(
+      resetPasswordDto.token,
+    );
+    if (!inValid)
+      throw new HttpException('Token không hợp lệ', HttpStatus.BAD_REQUEST);
+
+    const payload = await this.jwtService.verifyAsync(resetPasswordDto.token, {
+      secret: process.env.RESET_TOKEN_SECRET,
+    });
+
+    const user = await this.userService.findOneById(payload.id);
+    const hashNewPassword = await bcrypt.hash(resetPasswordDto.newPassword, 10);
+    user.password = hashNewPassword;
+    await this.userRepository.save(user);
+
+    return 'reset password success';
   }
 }

@@ -14,6 +14,7 @@ import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { Auth } from './enum/auth.enum';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { ResetPasswordDto } from './dto/resetPassword.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -53,7 +54,12 @@ export class AuthController {
   }
 
   @Get('validate-reset-token')
-  async validateResetPasswordToken(@Query('token') token: string) {
+  async validateResetPasswordToken(@Body('token') token: string) {
     return this.authService.validateResetPasswordToken(token);
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.resetPassword(resetPasswordDto);
   }
 }
