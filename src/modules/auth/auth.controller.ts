@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { ForgotPasswordDto } from './dto/forgotPassword.dto';
@@ -42,5 +50,10 @@ export class AuthController {
     return {
       message: message,
     };
+  }
+
+  @Get('validate-reset-token')
+  async validateResetPasswordToken(@Query('token') token: string) {
+    return this.authService.validateResetPasswordToken(token);
   }
 }

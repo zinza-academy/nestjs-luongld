@@ -82,19 +82,22 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
 
-    const resetToken = await this.jwtService.signAsync(
+    const resetPasswordToken = await this.jwtService.signAsync(
       {
         id: user.id,
         email: user.email,
       },
-      { expiresIn: '30m', secret: process.env.ACCESS_TOKEN_SECRET },
+      {
+        secret: process.env.RESET_TOKEN_SECRET,
+        expiresIn: process.env.RESET_TOKEN_EXPIRE,
+      },
     );
 
     const mailOptions: MailOptions = {
       to: forgotPasswordDto.email,
       subject: 'Đặt lại mật khẩu',
       username: user.userName,
-      resetPasswordUrl: `${process.env.BASE_URL}/reset-password?token=${resetToken}`,
+      resetPasswordUrl: `${process.env.BASE_URL}/validate-reset-token?token=${resetPasswordToken}`,
     };
     await this.sendMailForgotPassword(mailOptions);
 
@@ -111,5 +114,16 @@ export class AuthService {
         resetPasswordUrl: mailOptions.resetPasswordUrl,
       },
     });
+  }
+
+  async validateResetPasswordToken(token: string): Promise<boolean> {
+    try {
+      const decoded = await this.jwtService.verifyAsync(token, {
+        secret: process.env.RESET_TOKEN_SECRET,
+      });
+      if (decoded) return true;
+    } catch (error) {
+      return false;
+    }
   }
 }
