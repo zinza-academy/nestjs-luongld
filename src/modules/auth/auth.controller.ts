@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
@@ -33,5 +33,14 @@ export class AuthController {
   @Post('register')
   register(@Body() signUpDto: SignUpDto) {
     return this.authService.register(signUpDto);
+  }
+
+  @Get('sendmail')
+  async sendMail() {
+    const mail = await this.authService.sendMail();
+    return {
+      message: 'success',
+      mail,
+    };
   }
 }

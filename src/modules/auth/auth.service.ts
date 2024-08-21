@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { MailerService } from '@nestjs-modules/mailer';
+import { MailOptions } from './types/mailOptions';
 
 @Injectable()
 export class AuthService {
@@ -68,5 +69,19 @@ export class AuthService {
     return {
       message: 'register success',
     };
+  }
+
+  async sendMail() {
+    const resetPasswordUrl = `https://yourapp.com/reset-password?token=your-token`;
+
+    await this.mailService.sendMail({
+      to: 'trumyugioh@gmail.com',
+      subject: 'Đặt lại mật khẩu',
+      template: './reset-password',
+      context: {
+        username: 'luongld',
+        resetPasswordUrl,
+      },
+    });
   }
 }
