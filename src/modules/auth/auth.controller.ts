@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
+import { ForgotPasswordDto } from './dto/forgotPassword.dto';
 import { SignInDto } from './dto/signIn.dto';
+import { SignUpDto } from './dto/signUp.dto';
 import { Auth } from './enum/auth.enum';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
-import { SignUpDto } from './dto/signUp.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -35,12 +36,11 @@ export class AuthController {
     return this.authService.register(signUpDto);
   }
 
-  @Get('sendmail')
-  async sendMail() {
-    const mail = await this.authService.sendMail();
+  @Post('forgot-password')
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    const message = await this.authService.forgotPassword(forgotPasswordDto);
     return {
-      message: 'success',
-      mail,
+      message: message,
     };
   }
 }

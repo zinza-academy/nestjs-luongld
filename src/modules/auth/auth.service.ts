@@ -9,6 +9,7 @@ import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { MailOptions } from './types/mailOptions';
+import { ForgotPasswordDto } from './dto/forgotPassword.dto';
 
 @Injectable()
 export class AuthService {
@@ -71,16 +72,43 @@ export class AuthService {
     };
   }
 
-  async sendMail() {
-    const resetPasswordUrl = `https://yourapp.com/reset-password?token=your-token`;
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
+    const user = await this.userRepository.findOne({
+      where: { email: forgotPasswordDto.email },
+    });
+    if (!user)
+      throw new HttpException(
+        'Người dùng không tồn tại',
+        HttpStatus.BAD_REQUEST,
+      );
 
-    await this.mailService.sendMail({
-      to: 'trumyugioh@gmail.com',
+    const resetToken = await this.jwtService.signAsync(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      { expiresIn: '30m', secret: process.env.ACCESS_TOKEN_SECRET },
+    );
+
+    const mailOptions: MailOptions = {
+      to: forgotPasswordDto.email,
       subject: 'Đặt lại mật khẩu',
+      username: user.userName,
+      resetPasswordUrl: `${process.env.BASE_URL}/reset-password?token=${resetToken}`,
+    };
+    await this.sendMailForgotPassword(mailOptions);
+
+    return 'Yêu cầu đặt lại mật khẩu đã được gửi đến email của bạn';
+  }
+
+  async sendMailForgotPassword(mailOptions: MailOptions) {
+    await this.mailService.sendMail({
+      to: mailOptions.to,
+      subject: mailOptions.subject,
       template: './reset-password',
       context: {
-        username: 'luongld',
-        resetPasswordUrl,
+        username: mailOptions.username,
+        resetPasswordUrl: mailOptions.resetPasswordUrl,
       },
     });
   }
