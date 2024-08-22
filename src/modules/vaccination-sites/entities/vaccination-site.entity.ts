@@ -15,13 +15,13 @@ export class VaccinationSite {
   address: string;
 
   @Column()
-  provinceId: string;
+  provinceId: number;
 
   @Column()
-  districtId: string;
+  districtId: number;
 
   @Column()
-  wardId: string;
+  wardId: number;
 
   @Column()
   vaccinationSiteLeader: string;

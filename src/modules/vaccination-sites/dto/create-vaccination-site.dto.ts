@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateVaccinationSiteDto {
   @IsString()
@@ -9,15 +9,23 @@ export class CreateVaccinationSiteDto {
   @IsNotEmpty({ message: 'Địa chỉ không được để trống' })
   address: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty({ message: 'Tỉnh/thành không được để trống' })
-  provinceId: string;
+  provinceId: number;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty({ message: 'Quận/huyện không được để trống' })
-  districtId: string;
+  districtId: number;
+
+  @IsNumber()
+  @IsNotEmpty({ message: 'Phường/xã không được để trống' })
+  wardId: number;
 
   @IsString()
-  @IsNotEmpty({ message: 'Phường/xã không được để trống' })
-  wardId: string;
+  @IsNotEmpty({ message: 'Tên người đúng đầu cơ sở không được để trống' })
+  vaccinationSiteLeader: string;
+
+  @IsNumber()
+  @IsNotEmpty({ message: 'Số lượng bàn tiêm không được để trống' })
+  quantityTable: number;
 }
