@@ -93,6 +93,8 @@ export class AuthService {
         expiresIn: process.env.RESET_TOKEN_EXPIRE,
       },
     );
+    user.resetPasswordToken = resetPasswordToken;
+    await this.userRepository.save(user);
 
     const mailOptions: MailOptions = {
       to: forgotPasswordDto.email,
@@ -121,10 +123,12 @@ export class AuthService {
 
   async validateResetPasswordToken(token: string): Promise<boolean> {
     try {
-      const decoded = await this.jwtService.verifyAsync(token, {
-        secret: process.env.RESET_TOKEN_SECRET,
+      const user = await this.userRepository.findOne({
+        where: {
+          resetPasswordToken: token,
+        },
       });
-      if (decoded) return true;
+      if (user) return true;
     } catch (error) {
       return false;
     }
@@ -144,6 +148,7 @@ export class AuthService {
     const user = await this.userService.findOneById(payload.id);
     const hashNewPassword = await bcrypt.hash(resetPasswordDto.newPassword, 10);
     user.password = hashNewPassword;
+    user.resetPasswordToken = '';
     await this.userRepository.save(user);
 
     return { message: 'reset password success' };

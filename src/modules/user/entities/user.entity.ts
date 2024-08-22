@@ -33,6 +33,9 @@ export class User {
   @Column()
   wardId: number;
 
+  @Column({ type: String, default: '' })
+  resetPasswordToken: string;
+
   @Column({ type: 'enum', enum: Role, default: Role.User })
   role: Role;
 }
