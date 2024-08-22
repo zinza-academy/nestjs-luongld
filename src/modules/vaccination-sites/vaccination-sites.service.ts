@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { PagingVaccinationSiteDto } from './dto/paging-vaccination-site.dto';
 import { VaccinationSite } from './entities/vaccination-site.entity';
 import { CreateVaccinationSiteDto } from './dto/create-vaccination-site.dto';
+import { UpdateVaccinationSiteDto } from './dto/update-vaccination-site.dto';
 
 @Injectable()
 export class VaccinationSitesService {
@@ -56,7 +57,15 @@ export class VaccinationSitesService {
     };
   }
 
-  // update(id: number, updateVaccinationSiteDto: UpdateVaccinationSiteDto) {
-  //   return `This action updates a #${id} vaccinationSite`;
-  // }
+  async update(id: number, updateVaccinationSiteDto: UpdateVaccinationSiteDto) {
+    const vaccinationSite = await this.findOneById(id);
+    await this.vaccinationSiteService
+      .createQueryBuilder()
+      .update(VaccinationSite)
+      .set(updateVaccinationSiteDto)
+      .where('id = :id', { id: id })
+      .execute();
+
+    return vaccinationSite;
+  }
 }

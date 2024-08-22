@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -15,6 +16,7 @@ import { JwtAuthGuard } from '@modules/auth/guard/jwt-auth.guard';
 import { RolesGuard } from '@modules/auth/guard/role.guard';
 import { Roles } from '@src/common/decorator/roles.decorator';
 import { Role } from '@src/common/enum/role.enum';
+import { UpdateVaccinationSiteDto } from './dto/update-vaccination-site.dto';
 
 @Controller('vaccination-sites')
 export class VaccinationSitesController {
@@ -39,11 +41,13 @@ export class VaccinationSitesController {
     return this.vaccinationSitesService.findOneById(id);
   }
 
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateVaccinationSiteDto: UpdateVaccinationSiteDto,
-  // ) {
-  //   return this.vaccinationSitesService.update(+id, updateVaccinationSiteDto);
-  // }
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateVaccinationSiteDto: UpdateVaccinationSiteDto,
+  ) {
+    return this.vaccinationSitesService.update(id, updateVaccinationSiteDto);
+  }
 }
