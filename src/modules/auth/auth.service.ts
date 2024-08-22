@@ -150,7 +150,6 @@ export class AuthService {
     user.password = hashNewPassword;
     user.resetPasswordToken = '';
     await this.userRepository.save(user);
-
     return { message: 'reset password success' };
   }
 }

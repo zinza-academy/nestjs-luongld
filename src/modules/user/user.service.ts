@@ -59,10 +59,11 @@ export class UserService {
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findOneById(id);
+    const hashNewPassword = await bcrypt.hash(updateUserDto.password, 10);
     await this.usersRepository
       .createQueryBuilder()
       .update(User)
-      .set(updateUserDto)
+      .set({ ...updateUserDto, password: hashNewPassword })
       .where('id = :id', { id: id })
       .execute();
 
@@ -77,7 +78,6 @@ export class UserService {
       .from(User)
       .where('id = :id', { id: id })
       .execute();
-
     return user;
   }
 }

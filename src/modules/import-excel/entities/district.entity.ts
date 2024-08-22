@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { Province } from './province.entity';
 import { Ward } from './ward.entity';
+import { VaccinationSite } from '@modules/vaccination-sites/entities/vaccination-site.entity';
 
 @Entity()
 export class District {
@@ -15,4 +16,7 @@ export class District {
 
   @OneToMany(() => Ward, (ward) => ward.district)
   wards: Ward[];
+
+  @OneToMany(() => VaccinationSite, (vaccineSites) => vaccineSites.district)
+  vaccineSites: VaccinationSite[];
 }
