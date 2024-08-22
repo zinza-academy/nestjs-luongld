@@ -102,7 +102,9 @@ export class AuthService {
     };
     await this.sendMailForgotPassword(mailOptions);
 
-    return 'Yêu cầu đặt lại mật khẩu đã được gửi đến email của bạn';
+    return {
+      message: 'Yêu cầu đặt lại mật khẩu đã được gửi đến email của bạn',
+    };
   }
 
   async sendMailForgotPassword(mailOptions: MailOptions) {
@@ -144,6 +146,6 @@ export class AuthService {
     user.password = hashNewPassword;
     await this.userRepository.save(user);
 
-    return 'reset password success';
+    return { message: 'reset password success' };
   }
 }
