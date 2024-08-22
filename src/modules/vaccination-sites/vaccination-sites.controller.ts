@@ -32,7 +32,7 @@ export class VaccinationSitesController {
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.vaccinationSitesService.findOne(id);
+    return this.vaccinationSitesService.findOneById(id);
   }
 
   // @Patch(':id')
