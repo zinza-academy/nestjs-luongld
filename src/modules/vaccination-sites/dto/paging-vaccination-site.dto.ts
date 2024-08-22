@@ -1,11 +1,9 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class PagingVaccinationSiteDto {
-  @IsNumber()
   @IsNotEmpty()
   limit: number;
 
-  @IsNumber()
   @IsNotEmpty()
   page: number;
 }

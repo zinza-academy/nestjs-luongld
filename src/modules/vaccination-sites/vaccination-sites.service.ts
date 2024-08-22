@@ -1,11 +1,9 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateVaccinationSiteDto } from './dto/create-vaccination-site.dto';
-import { UpdateVaccinationSiteDto } from './dto/update-vaccination-site.dto';
-import { PagingVaccinationSiteDto } from './dto/paging-vaccination-site.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { VaccinationSite } from './entities/vaccination-site.entity';
-import { Repository } from 'typeorm';
 import { PagingResponse } from '@src/common/type/pagingResponse.class';
+import { Repository } from 'typeorm';
+import { PagingVaccinationSiteDto } from './dto/paging-vaccination-site.dto';
+import { VaccinationSite } from './entities/vaccination-site.entity';
 
 @Injectable()
 export class VaccinationSitesService {
@@ -13,10 +11,6 @@ export class VaccinationSitesService {
     @InjectRepository(VaccinationSite)
     private vaccinationSiteService: Repository<VaccinationSite>,
   ) {}
-
-  // create(createVaccinationSiteDto: CreateVaccinationSiteDto) {
-  //   return 'This action adds a new vaccinationSite';
-  // }
 
   async findAll(pagingVaccinationSiteDto: PagingVaccinationSiteDto) {
     const page = +pagingVaccinationSiteDto.page || 1;
@@ -41,6 +35,10 @@ export class VaccinationSitesService {
       throw new NotFoundException('Không tìm thấy điểm tiêm');
     return vaccinationSite;
   }
+
+  // create(createVaccinationSiteDto: CreateVaccinationSiteDto) {
+  //   return 'This action adds a new vaccinationSite';
+  // }
 
   // update(id: number, updateVaccinationSiteDto: UpdateVaccinationSiteDto) {
   //   return `This action updates a #${id} vaccinationSite`;
