@@ -18,8 +18,20 @@ export class VaccinationSitesService {
     const page = +pagingVaccinationSiteDto.page || 1;
     const limit = +pagingVaccinationSiteDto.limit || 5;
     const skip = (page - 1) * limit;
+
+    const whereOptions: any = {};
+    if (pagingVaccinationSiteDto.provinceId) {
+      whereOptions.provinceId = pagingVaccinationSiteDto.provinceId;
+      if (pagingVaccinationSiteDto.districtId) {
+        whereOptions.districtId = pagingVaccinationSiteDto.districtId;
+        if (pagingVaccinationSiteDto.wardId)
+          whereOptions.wardId = pagingVaccinationSiteDto.wardId;
+      }
+    }
+
     const [vaccinationSites, count] =
       await this.vaccinationSiteService.findAndCount({
+        where: whereOptions,
         skip: skip,
         take: limit,
       });

@@ -6,4 +6,10 @@ export class PagingVaccinationSiteDto {
 
   @IsNotEmpty()
   page: number;
+
+  provinceId?: number;
+
+  districtId?: number;
+
+  wardId?: number;
 }

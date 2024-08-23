@@ -1,3 +1,5 @@
+import { JwtAuthGuard } from '@modules/auth/guard/jwt-auth.guard';
+import { RolesGuard } from '@modules/auth/guard/role.guard';
 import {
   Body,
   Controller,
@@ -6,17 +8,14 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Query,
   UseGuards,
 } from '@nestjs/common';
-import { PagingVaccinationSiteDto } from './dto/paging-vaccination-site.dto';
-import { VaccinationSitesService } from './vaccination-sites.service';
-import { CreateVaccinationSiteDto } from './dto/create-vaccination-site.dto';
-import { JwtAuthGuard } from '@modules/auth/guard/jwt-auth.guard';
-import { RolesGuard } from '@modules/auth/guard/role.guard';
 import { Roles } from '@src/common/decorator/roles.decorator';
 import { Role } from '@src/common/enum/role.enum';
+import { CreateVaccinationSiteDto } from './dto/create-vaccination-site.dto';
+import { PagingVaccinationSiteDto } from './dto/paging-vaccination-site.dto';
 import { UpdateVaccinationSiteDto } from './dto/update-vaccination-site.dto';
+import { VaccinationSitesService } from './vaccination-sites.service';
 
 @Controller('vaccination-sites')
 export class VaccinationSitesController {
@@ -31,8 +30,8 @@ export class VaccinationSitesController {
     return this.vaccinationSitesService.create(createVaccinationSiteDto);
   }
 
-  @Get()
-  findAll(@Query() pagingVaccinationSiteDto: PagingVaccinationSiteDto) {
+  @Post('get-all-vaccination-site')
+  findAll(@Body() pagingVaccinationSiteDto: PagingVaccinationSiteDto) {
     return this.vaccinationSitesService.findAll(pagingVaccinationSiteDto);
   }
 
