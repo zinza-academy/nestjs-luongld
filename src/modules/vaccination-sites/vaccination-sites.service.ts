@@ -6,6 +6,7 @@ import { PagingVaccinationSiteDto } from './dto/paging-vaccination-site.dto';
 import { VaccinationSite } from './entities/vaccination-site.entity';
 import { CreateVaccinationSiteDto } from './dto/create-vaccination-site.dto';
 import { UpdateVaccinationSiteDto } from './dto/update-vaccination-site.dto';
+import { Province } from '@modules/import-excel/entities/province.entity';
 
 @Injectable()
 export class VaccinationSitesService {
@@ -32,6 +33,7 @@ export class VaccinationSitesService {
     const [vaccinationSites, count] =
       await this.vaccinationSiteService.findAndCount({
         where: whereOptions,
+        relations: ['province', 'district', 'ward'],
         skip: skip,
         take: limit,
       });
