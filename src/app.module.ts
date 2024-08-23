@@ -9,6 +9,7 @@ import { ImportExcelModule } from './modules/import-excel/import-excel.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
+import { VaccinationSitesModule } from './modules/vaccination-sites/vaccination-sites.module';
 import * as path from 'path';
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import * as path from 'path';
     UserModule,
     ImportExcelModule,
     AuthModule,
+    VaccinationSitesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
