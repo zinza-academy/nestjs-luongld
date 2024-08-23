@@ -15,8 +15,8 @@ export class VaccinationSitesService {
   ) {}
 
   async findAll(pagingVaccinationSiteDto: PagingVaccinationSiteDto) {
-    const page = +pagingVaccinationSiteDto.page || 1;
-    const limit = +pagingVaccinationSiteDto.limit || 5;
+    const page = pagingVaccinationSiteDto.page || 1;
+    const limit = pagingVaccinationSiteDto.limit || 5;
     const skip = (page - 1) * limit;
 
     const whereOptions: any = {};

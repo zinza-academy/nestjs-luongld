@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { Roles } from '@src/common/decorator/roles.decorator';
@@ -30,8 +31,8 @@ export class VaccinationSitesController {
     return this.vaccinationSitesService.create(createVaccinationSiteDto);
   }
 
-  @Post('get-all-vaccination-site')
-  findAll(@Body() pagingVaccinationSiteDto: PagingVaccinationSiteDto) {
+  @Get()
+  findAll(@Query() pagingVaccinationSiteDto: PagingVaccinationSiteDto) {
     return this.vaccinationSitesService.findAll(pagingVaccinationSiteDto);
   }
 
