@@ -6,7 +6,6 @@ import { PagingVaccinationSiteDto } from './dto/paging-vaccination-site.dto';
 import { VaccinationSite } from './entities/vaccination-site.entity';
 import { CreateVaccinationSiteDto } from './dto/create-vaccination-site.dto';
 import { UpdateVaccinationSiteDto } from './dto/update-vaccination-site.dto';
-import { Province } from '@modules/import-excel/entities/province.entity';
 
 @Injectable()
 export class VaccinationSitesService {
