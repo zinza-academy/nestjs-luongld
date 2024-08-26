@@ -1,12 +1,12 @@
 import { UserService } from '@modules/user/user.service';
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PagingDto } from '@src/common/dto/paging.dto';
+import { PagingResponse } from '@src/common/type/pagingResponse.class';
 import { Repository } from 'typeorm';
 import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.dto';
 import { UpdateVaccineRegistrationDto } from './dto/update-vaccine-registration.dto';
 import { VaccineRegistration } from './entities/vaccine-registration.entity';
-import { PagingDto } from '@src/common/dto/paging.dto';
-import { PagingResponse } from '@src/common/type/pagingResponse.class';
 
 @Injectable()
 export class VaccineRegistrationsService {
@@ -65,14 +65,17 @@ export class VaccineRegistrationsService {
     return registration;
   }
 
-  update(
+  async update(
     id: number,
     updateVaccineRegistrationDto: UpdateVaccineRegistrationDto,
   ) {
-    return `This action updates a #${id} vaccineRegistration`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} vaccineRegistration`;
+    const registration = await this.findOne(id);
+    await this.vaccinationRegistrationService
+      .createQueryBuilder()
+      .update(VaccineRegistration)
+      .set(updateVaccineRegistrationDto)
+      .where('id = :id', { id: id })
+      .execute();
+    return registration;
   }
 }

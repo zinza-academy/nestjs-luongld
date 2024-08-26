@@ -1,8 +1,8 @@
 import { JwtAuthGuard } from '@modules/auth/guard/jwt-auth.guard';
+import { RolesGuard } from '@modules/auth/guard/role.guard';
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -12,13 +12,12 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { Roles } from '@src/common/decorator/roles.decorator';
+import { PagingDto } from '@src/common/dto/paging.dto';
+import { Role } from '@src/common/enum/role.enum';
 import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.dto';
 import { UpdateVaccineRegistrationDto } from './dto/update-vaccine-registration.dto';
 import { VaccineRegistrationsService } from './vaccine-registrations.service';
-import { RolesGuard } from '@modules/auth/guard/role.guard';
-import { Roles } from '@src/common/decorator/roles.decorator';
-import { Role } from '@src/common/enum/role.enum';
-import { PagingDto } from '@src/common/dto/paging.dto';
 
 @Controller('vaccine-registrations')
 export class VaccineRegistrationsController {
@@ -60,18 +59,15 @@ export class VaccineRegistrationsController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateVaccineRegistrationDto: UpdateVaccineRegistrationDto,
   ) {
     return this.vaccineRegistrationsService.update(
-      +id,
+      id,
       updateVaccineRegistrationDto,
     );
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.vaccineRegistrationsService.remove(+id);
   }
 }
