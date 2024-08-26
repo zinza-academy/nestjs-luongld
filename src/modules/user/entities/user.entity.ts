@@ -1,5 +1,6 @@
+import { VaccineRegistration } from '@modules/vaccine-registrations/entities/vaccine-registration.entity';
 import { Role } from '@src/common/enum/role.enum';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class User {
@@ -38,4 +39,10 @@ export class User {
 
   @Column({ type: 'enum', enum: Role, default: Role.User })
   role: Role;
+
+  @OneToMany(
+    () => VaccineRegistration,
+    (vaccineRegistration) => vaccineRegistration.user,
+  )
+  vaccineRegistrations: VaccineRegistration[];
 }

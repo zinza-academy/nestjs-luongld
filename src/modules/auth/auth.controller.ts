@@ -29,7 +29,7 @@ export class AuthController {
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie(Auth.ACCESS_TOKEN);
-    return 'logout success';
+    return { message: 'logout success' };
   }
 
   @Post('register')
