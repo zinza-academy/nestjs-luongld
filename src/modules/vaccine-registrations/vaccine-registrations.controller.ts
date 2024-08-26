@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -54,8 +55,8 @@ export class VaccineRegistrationsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.vaccineRegistrationsService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.vaccineRegistrationsService.findOne(id);
   }
 
   @Patch(':id')

@@ -1,5 +1,5 @@
 import { UserService } from '@modules/user/user.service';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.dto';
@@ -56,8 +56,13 @@ export class VaccineRegistrationsService {
     return new PagingResponse(registrations, count, page, limit);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} vaccineRegistration`;
+  async findOne(id: number) {
+    const registration = await this.vaccinationRegistrationService.findOne({
+      where: { id: id },
+    });
+    if (!registration)
+      throw new NotFoundException('Không tìm thấy lịch đăng ký tiêm');
+    return registration;
   }
 
   update(
