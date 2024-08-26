@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { VaccineRegistrationsService } from './vaccine-registrations.service';
 import { RolesGuard } from '@modules/auth/guard/role.guard';
 import { Roles } from '@src/common/decorator/roles.decorator';
 import { Role } from '@src/common/enum/role.enum';
+import { PagingDto } from '@src/common/dto/paging.dto';
 
 @Controller('vaccine-registrations')
 export class VaccineRegistrationsController {
@@ -34,6 +36,21 @@ export class VaccineRegistrationsController {
       userId,
       createVaccineRegistrationDto,
     );
+  }
+
+  @Get('users')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.User)
+  findAllByUser(@Query() pagingDto: PagingDto, @Req() req) {
+    const userId: number = req.user.id;
+    return this.vaccineRegistrationsService.findAllByUser(userId, pagingDto);
+  }
+
+  @Get('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
+  findAllByAdmin(@Query() pagingDto: PagingDto) {
+    return this.vaccineRegistrationsService.findAllByAdmin(pagingDto);
   }
 
   @Get(':id')
