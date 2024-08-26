@@ -10,6 +10,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { VaccinationSitesModule } from './modules/vaccination-sites/vaccination-sites.module';
+import { VaccineRegistrationsModule } from './modules/vaccine-registrations/vaccine-registrations.module';
 import * as path from 'path';
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import * as path from 'path';
     ImportExcelModule,
     AuthModule,
     VaccinationSitesModule,
+    VaccineRegistrationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
