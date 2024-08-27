@@ -12,6 +12,9 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { VaccinationSitesModule } from './modules/vaccination-sites/vaccination-sites.module';
 import { VaccineRegistrationsModule } from './modules/vaccine-registrations/vaccine-registrations.module';
 import { VaccineModule } from './modules/vaccine/vaccine.module';
+import { ProvincesModule } from './modules/provinces/provinces.module';
+import { DistrictsModule } from './modules/districts/districts.module';
+import { WardsModule } from './modules/wards/wards.module';
 import * as path from 'path';
 @Module({
   imports: [
@@ -43,6 +46,9 @@ import * as path from 'path';
     VaccinationSitesModule,
     VaccineRegistrationsModule,
     VaccineModule,
+    ProvincesModule,
+    DistrictsModule,
+    WardsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

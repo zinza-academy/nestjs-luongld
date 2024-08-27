@@ -22,6 +22,7 @@ export class UserService {
     });
     if (user) throw new HttpException('Tên người dùng đã tồn tại', 400);
     const hashPassword = await bcrypt.hash(createUserDto.password, 10);
+
     await this.usersRepository
       .createQueryBuilder()
       .insert()
@@ -36,6 +37,7 @@ export class UserService {
     const page: number = +query.page || 1;
     const skip: number = limit * (page - 1);
     const [users, count] = await this.usersRepository.findAndCount({
+      relations: ['province', 'district', 'ward'],
       skip: skip,
       take: limit,
     });
@@ -45,6 +47,7 @@ export class UserService {
   async findOneById(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id: id },
+      relations: ['province', 'district', 'ward'],
     });
     if (!user) throw new HttpException('Người dùng không tồn tại', 400);
     return user;
