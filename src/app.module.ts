@@ -11,7 +11,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { VaccinationSitesModule } from './modules/vaccination-sites/vaccination-sites.module';
 import { VaccineRegistrationsModule } from './modules/vaccine-registrations/vaccine-registrations.module';
-import { VaccineModule } from './modules/vaccine/vaccine.module';
+import { VaccineModule } from './modules/vaccines/vaccine.module';
 import { ProvincesModule } from './modules/provinces/provinces.module';
 import { DistrictsModule } from './modules/districts/districts.module';
 import { WardsModule } from './modules/wards/wards.module';
