@@ -1,5 +1,5 @@
-import { User } from '@modules/user/entities/user.entity';
-import { UserService } from '@modules/user/user.service';
+import { User } from '@modules/users/entities/user.entity';
+import { UserService } from '@modules/users/user.service';
 import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';

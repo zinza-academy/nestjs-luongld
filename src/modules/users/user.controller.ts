@@ -23,8 +23,9 @@ import { UserService } from './user.service';
 import { RolesGuard } from '@modules/auth/guard/role.guard';
 import { Roles } from '@src/common/decorator/roles.decorator';
 import { Role } from '@src/common/enum/role.enum';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
-@Controller('user')
+@Controller('users')
 @UsePipes(ValidationPipe)
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -60,13 +61,45 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(
+  updateUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
+    @Req() req,
   ) {
-    return this.userService.update(id, updateUserDto);
+    const userId: number = req.user.id;
+    const isAdmin: boolean = req.user.role === Role.Admin;
+    const isUser: boolean = req.user.role === Role.User;
+
+    if (isAdmin || (isUser && userId === id))
+      return this.userService.updateUser(id, updateUserDto);
+
+    throw new HttpException(
+      'Quyền truy cập bị hạn chế',
+      HttpStatus.BAD_REQUEST,
+    );
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id/password')
+  updatePassword(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+    @Req() req,
+  ) {
+    const userId: number = req.user.id;
+    const isAdmin: boolean = req.user.role === Role.Admin;
+    const isUser: boolean = req.user.role === Role.User;
+
+    if (isAdmin || (isUser && userId === id))
+      return this.userService.updatePassword(id, updatePasswordDto);
+    throw new HttpException(
+      'Quyền truy cập bị hạn chế',
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.userService.remove(id);

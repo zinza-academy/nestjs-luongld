@@ -1,4 +1,4 @@
-import { User } from '@modules/user/entities/user.entity';
+import { User } from '@modules/users/entities/user.entity';
 import { Vaccine } from '@modules/vaccine/entities/vaccine.entity';
 import {
   Column,

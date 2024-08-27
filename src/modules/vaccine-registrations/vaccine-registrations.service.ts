@@ -1,4 +1,4 @@
-import { UserService } from '@modules/user/user.service';
+import { UserService } from '@modules/users/user.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PagingDto } from '@src/common/dto/paging.dto';
