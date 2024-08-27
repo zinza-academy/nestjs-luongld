@@ -17,6 +17,10 @@ export class ProvincesService {
     const page: number = pagingDto.page || 1;
     const skip: number = limit * (page - 1);
     const [provinces, count] = await this.provinceRepository.findAndCount({
+      relations: {
+        districts: true,
+        wards: true,
+      },
       skip: skip,
       take: limit,
     });
