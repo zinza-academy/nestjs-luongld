@@ -10,5 +10,6 @@ import { Ward } from '@modules/import-excel/entities/ward.entity';
   imports: [TypeOrmModule.forFeature([Province, District, Ward])],
   controllers: [WardsController],
   providers: [WardsService],
+  exports: [WardsService],
 })
 export class WardsModule {}

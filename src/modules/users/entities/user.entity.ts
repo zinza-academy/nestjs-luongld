@@ -34,6 +34,15 @@ export class User {
   @Column()
   gender: string;
 
+  @Column()
+  provinceId: number;
+
+  @Column()
+  districtId: number;
+
+  @Column()
+  wardId: number;
+
   @Column({ type: String, default: '' })
   resetPasswordToken: string;
 

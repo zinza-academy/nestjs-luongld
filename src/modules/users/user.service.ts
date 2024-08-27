@@ -8,12 +8,18 @@ import { PagingUserDto } from './dto/paging-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { ProvincesService } from '@modules/provinces/provinces.service';
+import { DistrictsService } from '@modules/districts/districts.service';
+import { WardsService } from '@modules/wards/wards.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private provincesService: ProvincesService,
+    private districtsService: DistrictsService,
+    private wardsService: WardsService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -22,12 +28,25 @@ export class UserService {
     });
     if (user) throw new HttpException('Tên người dùng đã tồn tại', 400);
     const hashPassword = await bcrypt.hash(createUserDto.password, 10);
+    const province = await this.provincesService.findOne(
+      createUserDto.provinceId,
+    );
+    const district = await this.districtsService.findOne(
+      createUserDto.districtId,
+    );
+    const ward = await this.wardsService.findOne(createUserDto.wardId);
 
     await this.usersRepository
       .createQueryBuilder()
       .insert()
       .into(User)
-      .values({ ...createUserDto, password: hashPassword })
+      .values({
+        ...createUserDto,
+        password: hashPassword,
+        province,
+        district,
+        ward,
+      })
       .execute();
     return { message: 'create user success!' };
   }
