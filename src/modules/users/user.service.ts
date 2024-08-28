@@ -1,3 +1,6 @@
+import { DistrictsService } from '@modules/districts/districts.service';
+import { ProvincesService } from '@modules/provinces/provinces.service';
+import { WardsService } from '@modules/wards/wards.service';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
@@ -7,10 +10,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { PagingUserDto } from './dto/paging-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { UpdatePasswordDto } from './dto/update-password.dto';
-import { ProvincesService } from '@modules/provinces/provinces.service';
-import { DistrictsService } from '@modules/districts/districts.service';
-import { WardsService } from '@modules/wards/wards.service';
 
 @Injectable()
 export class UserService {
@@ -90,16 +89,6 @@ export class UserService {
       .execute();
 
     return user;
-  }
-
-  async updatePassword(id: number, updatePasswordDto: UpdatePasswordDto) {
-    const user = await this.findOneById(id);
-    const hashPassword = await bcrypt.hash(updatePasswordDto.newPassword, 10);
-    user.password = hashPassword;
-    await this.usersRepository.save(user);
-    return {
-      message: 'Thay đổi mật khẩu thành công',
-    };
   }
 
   async remove(id: number): Promise<User> {

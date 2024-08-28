@@ -11,6 +11,7 @@ import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { MailOptions } from './types/mailOptions';
+import { UpdatePasswordDto } from '@modules/users/dto/update-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -151,5 +152,15 @@ export class AuthService {
     user.resetPasswordToken = '';
     await this.userRepository.save(user);
     return { message: 'reset password success' };
+  }
+
+  async updatePassword(id: number, updatePasswordDto: UpdatePasswordDto) {
+    const user = await this.userService.findOneById(id);
+    const hashPassword = await bcrypt.hash(updatePasswordDto.newPassword, 10);
+    user.password = hashPassword;
+    await this.userRepository.save(user);
+    return {
+      message: 'Thay đổi mật khẩu thành công',
+    };
   }
 }

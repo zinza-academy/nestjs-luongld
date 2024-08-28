@@ -1,4 +1,5 @@
 import { JwtAuthGuard } from '@modules/auth/guard/jwt-auth.guard';
+import { RolesGuard } from '@modules/auth/guard/role.guard';
 import {
   Body,
   Controller,
@@ -16,14 +17,12 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { Roles } from '@src/common/decorator/roles.decorator';
+import { Role } from '@src/common/enum/role.enum';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PagingUserDto } from './dto/paging-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
-import { RolesGuard } from '@modules/auth/guard/role.guard';
-import { Roles } from '@src/common/decorator/roles.decorator';
-import { Role } from '@src/common/enum/role.enum';
-import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Controller('users')
 @UsePipes(ValidationPipe)
@@ -73,25 +72,6 @@ export class UserController {
     if (isAdmin || (isUser && userId === id))
       return this.userService.updateUser(id, updateUserDto);
 
-    throw new HttpException(
-      'Quyền truy cập bị hạn chế',
-      HttpStatus.BAD_REQUEST,
-    );
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Patch(':id/password')
-  updatePassword(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updatePasswordDto: UpdatePasswordDto,
-    @Req() req,
-  ) {
-    const userId: number = req.user.id;
-    const isAdmin: boolean = req.user.role === Role.Admin;
-    const isUser: boolean = req.user.role === Role.User;
-
-    if (isAdmin || (isUser && userId === id))
-      return this.userService.updatePassword(id, updatePasswordDto);
     throw new HttpException(
       'Quyền truy cập bị hạn chế',
       HttpStatus.BAD_REQUEST,
