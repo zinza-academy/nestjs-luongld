@@ -37,6 +37,9 @@ export class VaccineRegistration {
   @Column({ type: 'boolean', default: false })
   isVaccinated: boolean;
 
+  @Column()
+  userId: number;
+
   @ManyToOne(() => User, (user) => user.vaccineRegistrations)
   user: User;
 

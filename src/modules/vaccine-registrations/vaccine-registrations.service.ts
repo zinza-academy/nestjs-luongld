@@ -36,10 +36,13 @@ export class VaccineRegistrationsService {
 
     const [registrations, count] =
       await this.vaccinationRegistrationService.findAndCount({
-        where: { id: userId },
+        where: { userId },
         relations: {
-          user: true,
-          vaccineResults: true,
+          vaccineResults: {
+            vaccinationSite: true,
+            vaccineRegistration: true,
+            vaccine: true,
+          },
         },
         take: limit,
         skip: skip,
@@ -55,7 +58,11 @@ export class VaccineRegistrationsService {
     const [registrations, count] =
       await this.vaccinationRegistrationService.findAndCount({
         relations: {
-          user: true,
+          user: {
+            province: true,
+            district: true,
+            ward: true,
+          },
           vaccineResults: {
             vaccinationSite: true,
             vaccineRegistration: true,
