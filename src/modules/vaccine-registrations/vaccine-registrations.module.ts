@@ -9,5 +9,6 @@ import { UserModule } from '@modules/users/user.module';
   imports: [TypeOrmModule.forFeature([VaccineRegistration]), UserModule],
   controllers: [VaccineRegistrationsController],
   providers: [VaccineRegistrationsService],
+  exports: [VaccineRegistrationsService],
 })
 export class VaccineRegistrationsModule {}

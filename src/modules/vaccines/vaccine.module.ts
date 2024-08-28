@@ -8,5 +8,6 @@ import { Vaccine } from './entities/vaccine.entity';
   imports: [TypeOrmModule.forFeature([Vaccine])],
   controllers: [VaccineController],
   providers: [VaccineService],
+  exports: [VaccineService],
 })
 export class VaccineModule {}

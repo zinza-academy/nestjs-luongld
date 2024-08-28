@@ -15,6 +15,7 @@ import { VaccineModule } from './modules/vaccines/vaccine.module';
 import { ProvincesModule } from './modules/provinces/provinces.module';
 import { DistrictsModule } from './modules/districts/districts.module';
 import { WardsModule } from './modules/wards/wards.module';
+import { VaccineResultModule } from './modules/vaccine-result/vaccine-result.module';
 import * as path from 'path';
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import * as path from 'path';
     ProvincesModule,
     DistrictsModule,
     WardsModule,
+    VaccineResultModule,
   ],
   controllers: [AppController],
   providers: [AppService],

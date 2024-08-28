@@ -1,6 +1,12 @@
 import { User } from '@modules/users/entities/user.entity';
-import { Vaccine } from '@modules/vaccines/entities/vaccine.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { VaccineResult } from '@modules/vaccine-result/entities/vaccine-result.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class VaccineRegistration {
@@ -28,18 +34,15 @@ export class VaccineRegistration {
   @Column()
   vaccinationSession: number;
 
-  @Column({ type: 'date' })
-  injectionTime: Date;
-
-  @Column()
-  injectionSite: string;
-
   @Column({ type: 'boolean', default: false })
   isVaccinated: boolean;
 
   @ManyToOne(() => User, (user) => user.vaccineRegistrations)
   user: User;
 
-  @ManyToOne(() => Vaccine, (vaccine) => vaccine.vaccineRegistrations)
-  vaccine: Vaccine;
+  @OneToMany(
+    () => VaccineResult,
+    (vaccineResult) => vaccineResult.vaccineRegistration,
+  )
+  vaccineResults: VaccineResult[];
 }

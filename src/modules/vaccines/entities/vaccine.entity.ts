@@ -1,4 +1,4 @@
-import { VaccineRegistration } from '@modules/vaccine-registrations/entities/vaccine-registration.entity';
+import { VaccineResult } from '@modules/vaccine-result/entities/vaccine-result.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -15,9 +15,6 @@ export class Vaccine {
   @Column()
   batchNumber: string;
 
-  @OneToMany(
-    () => VaccineRegistration,
-    (vaccineRegistration) => vaccineRegistration.vaccine,
-  )
-  vaccineRegistrations: Vaccine[];
+  @OneToMany(() => VaccineResult, (vaccineResult) => vaccineResult.vaccine)
+  vaccineResults: VaccineResult[];
 }
