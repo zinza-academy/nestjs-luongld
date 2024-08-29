@@ -3,11 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { VaccineRegistration } from './entities/vaccine-registration.entity';
 import { VaccineRegistrationsController } from './vaccine-registrations.controller';
 import { VaccineRegistrationsService } from './vaccine-registrations.service';
-import { UserModule } from '@modules/user/user.module';
+import { UserModule } from '@modules/users/user.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([VaccineRegistration]), UserModule],
   controllers: [VaccineRegistrationsController],
   providers: [VaccineRegistrationsService],
+  exports: [VaccineRegistrationsService],
 })
 export class VaccineRegistrationsModule {}

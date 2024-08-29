@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { Province } from './province.entity';
 import { District } from './district.entity';
 import { VaccinationSite } from '@modules/vaccination-sites/entities/vaccination-site.entity';
+import { User } from '@modules/users/entities/user.entity';
 
 @Entity()
 export class Ward {
@@ -19,4 +20,7 @@ export class Ward {
 
   @OneToMany(() => VaccinationSite, (vaccineSites) => vaccineSites.ward)
   vaccineSites: VaccinationSite[];
+
+  @OneToMany(() => User, (user) => user.ward)
+  users: User[];
 }

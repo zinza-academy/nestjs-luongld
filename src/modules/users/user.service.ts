@@ -1,3 +1,6 @@
+import { DistrictsService } from '@modules/districts/districts.service';
+import { ProvincesService } from '@modules/provinces/provinces.service';
+import { WardsService } from '@modules/wards/wards.service';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
@@ -13,6 +16,9 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private provincesService: ProvincesService,
+    private districtsService: DistrictsService,
+    private wardsService: WardsService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -21,11 +27,25 @@ export class UserService {
     });
     if (user) throw new HttpException('Tên người dùng đã tồn tại', 400);
     const hashPassword = await bcrypt.hash(createUserDto.password, 10);
+    const province = await this.provincesService.findOne(
+      createUserDto.provinceId,
+    );
+    const district = await this.districtsService.findOne(
+      createUserDto.districtId,
+    );
+    const ward = await this.wardsService.findOne(createUserDto.wardId);
+
     await this.usersRepository
       .createQueryBuilder()
       .insert()
       .into(User)
-      .values({ ...createUserDto, password: hashPassword })
+      .values({
+        ...createUserDto,
+        password: hashPassword,
+        province,
+        district,
+        ward,
+      })
       .execute();
     return { message: 'create user success!' };
   }
@@ -35,6 +55,7 @@ export class UserService {
     const page: number = +query.page || 1;
     const skip: number = limit * (page - 1);
     const [users, count] = await this.usersRepository.findAndCount({
+      relations: ['province', 'district', 'ward'],
       skip: skip,
       take: limit,
     });
@@ -44,6 +65,7 @@ export class UserService {
   async findOneById(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id: id },
+      relations: ['province', 'district', 'ward'],
     });
     if (!user) throw new HttpException('Người dùng không tồn tại', 400);
     return user;
@@ -57,13 +79,12 @@ export class UserService {
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+  async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findOneById(id);
-    const hashNewPassword = await bcrypt.hash(updateUserDto.password, 10);
     await this.usersRepository
       .createQueryBuilder()
       .update(User)
-      .set({ ...updateUserDto, password: hashNewPassword })
+      .set({ ...updateUserDto })
       .where('id = :id', { id: id })
       .execute();
 

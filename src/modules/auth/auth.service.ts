@@ -1,5 +1,6 @@
-import { User } from '@modules/user/entities/user.entity';
-import { UserService } from '@modules/user/user.service';
+import { UpdatePasswordDto } from '@modules/users/dto/update-password.dto';
+import { User } from '@modules/users/entities/user.entity';
+import { UserService } from '@modules/users/user.service';
 import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -151,5 +152,15 @@ export class AuthService {
     user.resetPasswordToken = '';
     await this.userRepository.save(user);
     return { message: 'reset password success' };
+  }
+
+  async updatePassword(id: number, updatePasswordDto: UpdatePasswordDto) {
+    const user = await this.userService.findOneById(id);
+    const hashPassword = await bcrypt.hash(updatePasswordDto.newPassword, 10);
+    user.password = hashPassword;
+    await this.userRepository.save(user);
+    return {
+      message: 'Thay đổi mật khẩu thành công',
+    };
   }
 }

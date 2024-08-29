@@ -1,6 +1,15 @@
+import { District } from '@modules/import-excel/entities/district.entity';
+import { Province } from '@modules/import-excel/entities/province.entity';
+import { Ward } from '@modules/import-excel/entities/ward.entity';
 import { VaccineRegistration } from '@modules/vaccine-registrations/entities/vaccine-registration.entity';
 import { Role } from '@src/common/enum/role.enum';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -19,9 +28,6 @@ export class User {
   @Column()
   citizenId: string;
 
-  @Column({ type: 'date' })
-  dateOfBirth: Date;
-
   @Column()
   gender: string;
 
@@ -34,6 +40,9 @@ export class User {
   @Column()
   wardId: number;
 
+  @Column({ type: 'date' })
+  dateOfBirth: Date;
+
   @Column({ type: String, default: '' })
   resetPasswordToken: string;
 
@@ -45,4 +54,13 @@ export class User {
     (vaccineRegistration) => vaccineRegistration.user,
   )
   vaccineRegistrations: VaccineRegistration[];
+
+  @ManyToOne(() => Province, (province) => province.users)
+  province: Province;
+
+  @ManyToOne(() => District, (district) => district.users)
+  district: District;
+
+  @ManyToOne(() => Ward, (ward) => ward.users)
+  ward: Ward;
 }

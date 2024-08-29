@@ -1,7 +1,14 @@
 import { District } from '@modules/import-excel/entities/district.entity';
 import { Province } from '@modules/import-excel/entities/province.entity';
 import { Ward } from '@modules/import-excel/entities/ward.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { VaccineResult } from '@modules/vaccine-result/entities/vaccine-result.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class VaccinationSite {
@@ -37,4 +44,10 @@ export class VaccinationSite {
 
   @ManyToOne(() => Ward, (ward) => ward.vaccineSites)
   ward: Ward;
+
+  @OneToMany(
+    () => VaccineResult,
+    (vaccineResult) => vaccineResult.vaccinationSite,
+  )
+  vaccineResults: VaccineResult[];
 }

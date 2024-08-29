@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class PagingVaccinationSiteDto {
   @IsNotEmpty()
@@ -26,4 +26,12 @@ export class PagingVaccinationSiteDto {
   @IsOptional()
   @Type(() => Number)
   wardId?: number;
+
+  @IsString()
+  @IsOptional()
+  vaccinationSite?: string;
+
+  @IsString()
+  @IsOptional()
+  address?: string;
 }

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PagingResponse } from '@src/common/type/pagingResponse.class';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { PagingVaccinationSiteDto } from './dto/paging-vaccination-site.dto';
 import { VaccinationSite } from './entities/vaccination-site.entity';
 import { CreateVaccinationSiteDto } from './dto/create-vaccination-site.dto';
@@ -27,6 +27,16 @@ export class VaccinationSitesService {
         if (pagingVaccinationSiteDto.wardId)
           whereOptions.wardId = pagingVaccinationSiteDto.wardId;
       }
+    }
+
+    if (pagingVaccinationSiteDto.vaccinationSite) {
+      whereOptions.vaccinationSiteName = Like(
+        `%${pagingVaccinationSiteDto.vaccinationSite}%`,
+      );
+    }
+
+    if (pagingVaccinationSiteDto.address) {
+      whereOptions.address = Like(`%${pagingVaccinationSiteDto.address}%`);
     }
 
     const [vaccinationSites, count] =

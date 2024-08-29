@@ -1,4 +1,4 @@
-import { UserService } from '@modules/user/user.service';
+import { UserService } from '@modules/users/user.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PagingDto } from '@src/common/dto/paging.dto';
@@ -36,7 +36,14 @@ export class VaccineRegistrationsService {
 
     const [registrations, count] =
       await this.vaccinationRegistrationService.findAndCount({
-        where: { id: userId },
+        where: { userId },
+        relations: {
+          vaccineResults: {
+            vaccinationSite: true,
+            vaccineRegistration: true,
+            vaccine: true,
+          },
+        },
         take: limit,
         skip: skip,
       });
@@ -50,6 +57,18 @@ export class VaccineRegistrationsService {
 
     const [registrations, count] =
       await this.vaccinationRegistrationService.findAndCount({
+        relations: {
+          user: {
+            province: true,
+            district: true,
+            ward: true,
+          },
+          vaccineResults: {
+            vaccinationSite: true,
+            vaccineRegistration: true,
+            vaccine: true,
+          },
+        },
         take: limit,
         skip: skip,
       });
@@ -59,6 +78,10 @@ export class VaccineRegistrationsService {
   async findOne(id: number) {
     const registration = await this.vaccinationRegistrationService.findOne({
       where: { id: id },
+      relations: {
+        user: true,
+        vaccineResults: true,
+      },
     });
     if (!registration)
       throw new NotFoundException('Không tìm thấy lịch đăng ký tiêm');
@@ -69,13 +92,19 @@ export class VaccineRegistrationsService {
     id: number,
     updateVaccineRegistrationDto: UpdateVaccineRegistrationDto,
   ) {
-    const registration = await this.findOne(id);
+    const vaccineRegistration = await this.findOne(id);
     await this.vaccinationRegistrationService
       .createQueryBuilder()
       .update(VaccineRegistration)
       .set(updateVaccineRegistrationDto)
       .where('id = :id', { id: id })
       .execute();
-    return registration;
+    return vaccineRegistration;
+  }
+
+  async updateVaccineResult(id: number) {
+    const vaccineRegistration = await this.findOne(id);
+    vaccineRegistration.isVaccinated = true;
+    await this.vaccinationRegistrationService.save(vaccineRegistration);
   }
 }

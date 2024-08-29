@@ -4,13 +4,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { options } from '../db/ormconfig';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './modules/user/user.module';
+import { UserModule } from './modules/users/user.module';
 import { ImportExcelModule } from './modules/import-excel/import-excel.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { VaccinationSitesModule } from './modules/vaccination-sites/vaccination-sites.module';
 import { VaccineRegistrationsModule } from './modules/vaccine-registrations/vaccine-registrations.module';
+import { VaccineModule } from './modules/vaccines/vaccine.module';
+import { ProvincesModule } from './modules/provinces/provinces.module';
+import { DistrictsModule } from './modules/districts/districts.module';
+import { WardsModule } from './modules/wards/wards.module';
+import { VaccineResultModule } from './modules/vaccine-result/vaccine-result.module';
 import * as path from 'path';
 @Module({
   imports: [
@@ -41,6 +46,11 @@ import * as path from 'path';
     AuthModule,
     VaccinationSitesModule,
     VaccineRegistrationsModule,
+    VaccineModule,
+    ProvincesModule,
+    DistrictsModule,
+    WardsModule,
+    VaccineResultModule,
   ],
   controllers: [AppController],
   providers: [AppService],
