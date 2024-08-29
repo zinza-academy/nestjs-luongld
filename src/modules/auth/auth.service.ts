@@ -1,3 +1,4 @@
+import { UpdatePasswordDto } from '@modules/users/dto/update-password.dto';
 import { User } from '@modules/users/entities/user.entity';
 import { UserService } from '@modules/users/user.service';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -11,7 +12,6 @@ import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { MailOptions } from './types/mailOptions';
-import { UpdatePasswordDto } from '@modules/users/dto/update-password.dto';
 
 @Injectable()
 export class AuthService {

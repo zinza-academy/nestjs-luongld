@@ -28,9 +28,6 @@ export class User {
   @Column()
   citizenId: string;
 
-  @Column({ type: 'date' })
-  dateOfBirth: Date;
-
   @Column()
   gender: string;
 
@@ -42,6 +39,9 @@ export class User {
 
   @Column()
   wardId: number;
+
+  @Column({ type: 'date' })
+  dateOfBirth: Date;
 
   @Column({ type: String, default: '' })
   resetPasswordToken: string;

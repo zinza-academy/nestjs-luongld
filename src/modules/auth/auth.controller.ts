@@ -3,17 +3,12 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
-  Param,
-  ParseIntPipe,
   Patch,
   Post,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Role } from '@src/common/enum/role.enum';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { ForgotPasswordDto } from './dto/forgotPassword.dto';
@@ -71,21 +66,9 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':id/password')
-  updatePassword(
-    @Body() updatePasswordDto: UpdatePasswordDto,
-    @Param('id', ParseIntPipe) id: number,
-    @Req() req,
-  ) {
+  @Patch('password')
+  updatePassword(@Body() updatePasswordDto: UpdatePasswordDto, @Req() req) {
     const userId: number = req.user.id;
-    const isAdmin: boolean = req.user.role === Role.Admin;
-    const isUser: boolean = req.user.role === Role.User;
-
-    if (isAdmin || (isUser && userId === id))
-      return this.authService.updatePassword(id, updatePasswordDto);
-    throw new HttpException(
-      'Quyền truy cập bị hạn chế',
-      HttpStatus.BAD_REQUEST,
-    );
+    return this.authService.updatePassword(userId, updatePasswordDto);
   }
 }
