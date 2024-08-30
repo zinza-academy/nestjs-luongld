@@ -79,6 +79,14 @@ export class UserService {
     return user;
   }
 
+  async findOneByEmail(email: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { email: email },
+    });
+    if (!user) throw new HttpException('Email không tồn tại', 400);
+    return user;
+  }
+
   async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findOneById(id);
     await this.usersRepository
