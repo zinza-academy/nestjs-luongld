@@ -23,11 +23,18 @@ export class DistrictsService {
     return new PagingResponse(districts, count, page, limit);
   }
 
+  async findAllByProvinceId(provinceId: number) {
+    const district = await this.districtRepository.find({
+      where: { provinceId: provinceId },
+    });
+    return district;
+  }
+
   async findOne(id: number) {
     const district = await this.districtRepository.findOne({
       where: { id: id },
     });
-    if (!district) throw new NotFoundException('Không tìm thấy huyện!');
+    if (district) throw new NotFoundException('Không tìm thấy tỉnh');
     return district;
   }
 }

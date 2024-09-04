@@ -12,6 +12,9 @@ export class Ward {
   @Column()
   ward: string;
 
+  @Column()
+  districtId: number;
+
   @ManyToOne(() => District, (district) => district.wards)
   district: District;
 

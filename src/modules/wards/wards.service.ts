@@ -23,6 +23,13 @@ export class WardsService {
     return new PagingResponse(wards, count, page, limit);
   }
 
+  async findAllByDistrictId(districtId: number) {
+    const [wards] = await this.wardsRepository.findAndCount({
+      where: { districtId: districtId },
+    });
+    return wards;
+  }
+
   async findOne(id: number) {
     const ward = await this.wardsRepository.findOne({
       where: { id: id },

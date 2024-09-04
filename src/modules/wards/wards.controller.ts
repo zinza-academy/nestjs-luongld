@@ -10,6 +10,11 @@ export class WardsController {
     return this.wardsService.findAll(pagingDto);
   }
 
+  @Get(':id/district')
+  findAllByDistrictId(@Param('id', ParseIntPipe) id: number) {
+    return this.wardsService.findAllByDistrictId(id);
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.wardsService.findOne(id);

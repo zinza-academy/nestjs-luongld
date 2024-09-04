@@ -7,8 +7,8 @@ export class ProvincesController {
   constructor(private readonly provincesService: ProvincesService) {}
 
   @Get()
-  findAll(@Query() pagingDto: PagingDto) {
-    return this.provincesService.findAll(pagingDto);
+  findAll() {
+    return this.provincesService.findAll();
   }
 
   @Get(':id')

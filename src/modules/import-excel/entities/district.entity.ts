@@ -12,6 +12,9 @@ export class District {
   @Column()
   district: string;
 
+  @Column()
+  provinceId: number;
+
   @ManyToOne(() => Province, (province) => province.districts)
   province: Province;
 
