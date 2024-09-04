@@ -102,7 +102,7 @@ export class AuthService {
       to: forgotPasswordDto.email,
       subject: 'Đặt lại mật khẩu',
       username: user.userName,
-      resetPasswordUrl: `${process.env.BASE_URL}/reset-password?token=${resetPasswordToken}`,
+      resetPasswordUrl: `${process.env.BASE_URL_CLIENT}/auth/resetPassword?token=${resetPasswordToken}`,
     };
     await this.sendMailForgotPassword(mailOptions);
 
@@ -152,7 +152,7 @@ export class AuthService {
     user.password = hashNewPassword;
     user.resetPasswordToken = '';
     await this.userRepository.save(user);
-    return { message: 'reset password success' };
+    return { message: 'Thay đổi mật khẩu thành công!' };
   }
 
   async updatePassword(id: number, updatePasswordDto: UpdatePasswordDto) {

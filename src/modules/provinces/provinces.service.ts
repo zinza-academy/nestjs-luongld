@@ -1,7 +1,6 @@
 import { Province } from '@modules/import-excel/entities/province.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PagingDto } from '@src/common/dto/paging.dto';
 import { Repository } from 'typeorm';
 
 @Injectable()

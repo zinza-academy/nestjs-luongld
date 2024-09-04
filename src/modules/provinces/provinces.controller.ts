@@ -1,5 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
-import { PagingDto } from '@src/common/dto/paging.dto';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { ProvincesService } from './provinces.service';
 
 @Controller('provinces')
