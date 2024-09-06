@@ -1,3 +1,4 @@
+import { User } from '@modules/users/entities/user.entity';
 import { VaccinationSite } from '@modules/vaccination-sites/entities/vaccination-site.entity';
 import { VaccineRegistration } from '@modules/vaccine-registrations/entities/vaccine-registration.entity';
 import { Vaccine } from '@modules/vaccines/entities/vaccine.entity';
@@ -16,6 +17,12 @@ export class VaccineResult {
 
   @Column()
   vaccinationSiteId: number;
+
+  @Column()
+  userId: number;
+
+  @ManyToOne(() => User, (user) => user.vaccineResults)
+  user: User;
 
   @ManyToOne(
     () => VaccineRegistration,

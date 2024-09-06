@@ -8,6 +8,7 @@ import { VaccinationSitesService } from '@modules/vaccination-sites/vaccination-
 import { VaccineService } from '@modules/vaccines/vaccine.service';
 import { PagingDto } from '@src/common/dto/paging.dto';
 import { PagingResponse } from '@src/common/type/pagingResponse.class';
+import { UserService } from '@modules/users/user.service';
 
 @Injectable()
 export class VaccineResultService {
@@ -16,7 +17,8 @@ export class VaccineResultService {
     private vaccineResultRepository: Repository<VaccineResult>,
     private vaccineRegistrationsService: VaccineRegistrationsService,
     private vaccinationSitesService: VaccinationSitesService,
-    private vaccine: VaccineService,
+    private vaccineService: VaccineService,
+    private userService: UserService,
   ) {}
   async create(createVaccineResultDto: CreateVaccineResultDto) {
     const vaccineRegistration = await this.vaccineRegistrationsService.findOne(
@@ -26,8 +28,12 @@ export class VaccineResultService {
       createVaccineResultDto.vaccinationSiteId,
     );
 
-    const vaccine = await this.vaccine.findOne(
+    const vaccine = await this.vaccineService.findOne(
       createVaccineResultDto.vaccineId,
+    );
+
+    const user = await this.userService.findOneById(
+      createVaccineResultDto.userId,
     );
     await this.vaccineResultRepository
       .createQueryBuilder()
@@ -38,6 +44,7 @@ export class VaccineResultService {
         vaccineRegistration,
         vaccinationSite,
         vaccine,
+        user,
       })
       .execute();
     await this.vaccineRegistrationsService.updateVaccineResult(

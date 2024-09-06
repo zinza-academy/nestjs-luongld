@@ -43,6 +43,7 @@ export class VaccineRegistrationsService {
             vaccineRegistration: true,
             vaccine: true,
           },
+          user: true,
         },
         take: limit,
         skip: skip,

@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { VaccineResult } from './entities/vaccine-result.entity';
 import { VaccineResultController } from './vaccine-result.controller';
 import { VaccineResultService } from './vaccine-result.service';
+import { UserModule } from '@modules/users/user.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { VaccineResultService } from './vaccine-result.service';
     VaccineRegistrationsModule,
     VaccinationSitesModule,
     VaccineModule,
+    UserModule,
   ],
   controllers: [VaccineResultController],
   providers: [VaccineResultService],
