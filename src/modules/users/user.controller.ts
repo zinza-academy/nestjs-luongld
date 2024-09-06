@@ -7,6 +7,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
@@ -42,16 +43,20 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number, @Req() req) {
-    const userId: number = req.user.id;
-    const isAdmin: boolean = req.user.role === Role.Admin;
-    const isUser: boolean = req.user.role === Role.User;
+  @Get('profile')
+  findProfileByUser(@Req() req) {
+    const user = req.user;
+    if (!user) throw new NotFoundException('Không tìm thấy người dùng');
+    return user;
+  }
 
-    if (isAdmin || (isUser && userId === id)) {
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  findOneByAdmin(@Param('id', ParseIntPipe) id: number, @Req() req) {
+    const isAdmin: boolean = req.user.role === Role.Admin;
+    if (isAdmin) {
       return this.userService.findOneById(id);
     }
-
     throw new HttpException(
       'Quyền truy cập bị hạn chế',
       HttpStatus.BAD_REQUEST,
