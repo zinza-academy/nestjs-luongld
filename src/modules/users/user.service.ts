@@ -27,6 +27,7 @@ export class UserService {
     });
     if (user) throw new HttpException('Tên người dùng đã tồn tại', 400);
     const hashPassword = await bcrypt.hash(createUserDto.password, 10);
+
     const province = await this.provincesService.findOne(
       createUserDto.provinceId,
     );

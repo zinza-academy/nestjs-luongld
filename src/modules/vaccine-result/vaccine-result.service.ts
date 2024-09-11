@@ -81,4 +81,25 @@ export class VaccineResultService {
       });
     return new PagingResponse(vaccineResults, count, page, limit);
   }
+
+  async findAllByUser(userId: number, pagingDto: PagingDto) {
+    const limit = pagingDto.limit || 5;
+    const page = pagingDto.page || 1;
+    const skip = (page - 1) * limit;
+
+    const [vaccineResults, count] =
+      await this.vaccineResultRepository.findAndCount({
+        where: {
+          userId: userId,
+        },
+        relations: {
+          vaccinationSite: true,
+          vaccineRegistration: true,
+          vaccine: true,
+        },
+        take: limit,
+        skip: skip,
+      });
+    return new PagingResponse(vaccineResults, count, page, limit);
+  }
 }

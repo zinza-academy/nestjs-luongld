@@ -34,7 +34,7 @@ export class DistrictsService {
     const district = await this.districtRepository.findOne({
       where: { id: id },
     });
-    if (district) throw new NotFoundException('Không tìm thấy tỉnh');
+    if (!district) throw new NotFoundException('Không tìm thấy tỉnh');
     return district;
   }
 }

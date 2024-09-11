@@ -39,7 +39,7 @@ export class AuthService {
 
   async login(signInDto: SignInDto) {
     const user = await this.validateUser(signInDto);
-    const payload = { id: user.id, username: user.userName };
+    const payload = { id: user.id, username: user.userName, role: user.role };
     const jwtOptions = {
       expiresIn: process.env.ACCESS_TOKEN_EXPIRE,
       secret: process.env.ACCESS_TOKEN_SECRET,

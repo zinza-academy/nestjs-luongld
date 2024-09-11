@@ -36,8 +36,8 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty({ message: 'Giới tính không được để trống' })
-  @IsIn(['nam', 'nu'], {
-    message: 'Giới tính phải là nam hoặc nữ',
+  @IsIn(['1', '2'], {
+    message: 'Giới tính phải là Nam hoặc Nữ',
   })
   gender: string;
 

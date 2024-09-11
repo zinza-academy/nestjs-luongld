@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { CreateVaccineResultDto } from './dto/create-vaccine-result.dto';
@@ -31,6 +32,14 @@ export class VaccineResultController {
   @Get()
   findAll(@Body() pagingDto: PagingDto) {
     return this.vaccineResultService.findAll(pagingDto);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.User)
+  @Get('/user')
+  findAllByUser(@Req() req, @Body() pagingDto: PagingDto) {
+    const userId = req.user.id;
+    return this.vaccineResultService.findAllByUser(userId, pagingDto);
   }
 
   @Get(':id')
