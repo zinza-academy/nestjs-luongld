@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { CreateVaccineResultDto } from './dto/create-vaccine-result.dto';
 import { VaccineResult } from './entities/vaccine-result.entity';
 import { VaccineRegistrationsService } from '@modules/vaccine-registrations/vaccine-registrations.service';
@@ -9,6 +9,7 @@ import { VaccineService } from '@modules/vaccines/vaccine.service';
 import { PagingDto } from '@src/common/dto/paging.dto';
 import { PagingResponse } from '@src/common/type/pagingResponse.class';
 import { UserService } from '@modules/users/user.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class VaccineResultService {
@@ -20,6 +21,26 @@ export class VaccineResultService {
     private vaccineService: VaccineService,
     private userService: UserService,
   ) {}
+
+  async getVaccineStatistics() {
+    const countUserRegistration =
+      await this.vaccineRegistrationsService.getCountUserRegistration();
+    const startOfYesterday = moment()
+      .subtract(1, 'days')
+      .startOf('day')
+      .toDate();
+    const endOfYesterday = moment().subtract(1, 'days').endOf('day').toDate();
+    const countVaccineYesterday = await this.vaccineResultRepository.count({
+      where: { createdAt: Between(startOfYesterday, endOfYesterday) },
+    });
+    const countAllVaccineInjected = await this.vaccineResultRepository.count();
+    return {
+      countUserRegistration,
+      countVaccineYesterday,
+      countAllVaccineInjected,
+    };
+  }
+
   async create(createVaccineResultDto: CreateVaccineResultDto) {
     const vaccineRegistration = await this.vaccineRegistrationsService.findOne(
       createVaccineResultDto.vaccineRegistrationId,

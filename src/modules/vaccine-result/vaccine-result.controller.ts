@@ -1,3 +1,5 @@
+import { JwtAuthGuard } from '@modules/auth/guard/jwt-auth.guard';
+import { RolesGuard } from '@modules/auth/guard/role.guard';
 import {
   Body,
   Controller,
@@ -8,13 +10,11 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { Roles } from '@src/common/decorator/roles.decorator';
+import { PagingDto } from '@src/common/dto/paging.dto';
+import { Role } from '@src/common/enum/role.enum';
 import { CreateVaccineResultDto } from './dto/create-vaccine-result.dto';
 import { VaccineResultService } from './vaccine-result.service';
-import { PagingDto } from '@src/common/dto/paging.dto';
-import { Roles } from '@src/common/decorator/roles.decorator';
-import { JwtAuthGuard } from '@modules/auth/guard/jwt-auth.guard';
-import { RolesGuard } from '@modules/auth/guard/role.guard';
-import { Role } from '@src/common/enum/role.enum';
 
 @Controller('vaccine-result')
 export class VaccineResultController {
@@ -32,6 +32,11 @@ export class VaccineResultController {
   @Get()
   findAll(@Body() pagingDto: PagingDto) {
     return this.vaccineResultService.findAll(pagingDto);
+  }
+
+  @Get('statistics')
+  getVaccineStatistics() {
+    return this.vaccineResultService.getVaccineStatistics();
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

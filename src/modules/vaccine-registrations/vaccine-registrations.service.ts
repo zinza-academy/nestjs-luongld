@@ -15,6 +15,11 @@ export class VaccineRegistrationsService {
     private vaccinationRegistrationService: Repository<VaccineRegistration>,
     private userService: UserService,
   ) {}
+
+  async getCountUserRegistration() {
+    return this.vaccinationRegistrationService.count();
+  }
+
   async create(
     userId: number,
     createVaccineRegistrationDto: CreateVaccineRegistrationDto,
@@ -72,6 +77,9 @@ export class VaccineRegistrationsService {
         },
         take: limit,
         skip: skip,
+        order: {
+          id: 'DESC',
+        },
       });
     return new PagingResponse(registrations, count, page, limit);
   }
