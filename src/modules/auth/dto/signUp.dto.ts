@@ -32,9 +32,9 @@ export class SignUpDto {
   @IsNotEmpty({ message: 'Ngày sinh không được để trống' })
   dateOfBirth: Date;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty({ message: 'Giới tính không được để trống' })
-  gender: string;
+  gender: number;
 
   @IsNumber()
   @IsNotEmpty({ message: 'Tỉnh/thành không được để trống' })

@@ -30,7 +30,7 @@ export class User {
   citizenId: string;
 
   @Column()
-  gender: string;
+  gender: number;
 
   @Column()
   provinceId: number;

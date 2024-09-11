@@ -34,12 +34,12 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Ngày sinh không được để trống' })
   dateOfBirth: Date;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty({ message: 'Giới tính không được để trống' })
-  @IsIn(['1', '2'], {
+  @IsIn([1, 2], {
     message: 'Giới tính phải là Nam hoặc Nữ',
   })
-  gender: string;
+  gender: number;
 
   @IsNumber()
   @IsNotEmpty({ message: 'Tỉnh/thành không được để trống' })
