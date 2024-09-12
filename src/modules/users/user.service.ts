@@ -27,6 +27,7 @@ export class UserService {
     });
     if (user) throw new HttpException('Tên người dùng đã tồn tại', 400);
     const hashPassword = await bcrypt.hash(createUserDto.password, 10);
+
     const province = await this.provincesService.findOne(
       createUserDto.provinceId,
     );
@@ -76,6 +77,14 @@ export class UserService {
       where: { userName: userName },
     });
     if (!user) throw new HttpException('Người dùng không tồn tại', 400);
+    return user;
+  }
+
+  async findOneByEmail(email: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { email: email },
+    });
+    if (!user) throw new HttpException('Email không tồn tại', 400);
     return user;
   }
 

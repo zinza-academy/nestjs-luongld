@@ -10,8 +10,8 @@ export class DistrictsController {
     return this.districtsService.findAll(pagingDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.districtsService.findOne(id);
+  @Get(':id/province')
+  findAllByProvinceId(@Param('id', ParseIntPipe) provinceId: number) {
+    return this.districtsService.findAllByProvinceId(provinceId);
   }
 }

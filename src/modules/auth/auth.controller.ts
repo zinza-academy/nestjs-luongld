@@ -27,12 +27,12 @@ export class AuthController {
     @Body() signInDto: SignInDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { access_token } = await this.authService.login(signInDto);
+    const { access_token, user } = await this.authService.login(signInDto);
     res.cookie(Auth.ACCESS_TOKEN, access_token, {
       httpOnly: true,
       maxAge: 30 * 60 * 1000,
     });
-    return { access_token };
+    return { access_token, user };
   }
 
   @UseGuards(JwtAuthGuard)
@@ -50,9 +50,7 @@ export class AuthController {
   @Post('forgot-password')
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
     const message = await this.authService.forgotPassword(forgotPasswordDto);
-    return {
-      message,
-    };
+    return message;
   }
 
   @Get('validate-reset-token')

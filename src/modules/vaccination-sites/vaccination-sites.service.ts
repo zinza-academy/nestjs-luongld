@@ -6,6 +6,7 @@ import { PagingVaccinationSiteDto } from './dto/paging-vaccination-site.dto';
 import { VaccinationSite } from './entities/vaccination-site.entity';
 import { CreateVaccinationSiteDto } from './dto/create-vaccination-site.dto';
 import { UpdateVaccinationSiteDto } from './dto/update-vaccination-site.dto';
+import { log } from 'util';
 
 @Injectable()
 export class VaccinationSitesService {
@@ -15,16 +16,16 @@ export class VaccinationSitesService {
   ) {}
 
   async findAll(pagingVaccinationSiteDto: PagingVaccinationSiteDto) {
-    const page = pagingVaccinationSiteDto.page || 1;
-    const limit = pagingVaccinationSiteDto.limit || 5;
+    const page: number = pagingVaccinationSiteDto.page || 1;
+    const limit: number = pagingVaccinationSiteDto.limit || 5;
     const skip = (page - 1) * limit;
 
     const whereOptions: any = {};
-    if (pagingVaccinationSiteDto.provinceId) {
+    if (+pagingVaccinationSiteDto.provinceId) {
       whereOptions.provinceId = pagingVaccinationSiteDto.provinceId;
-      if (pagingVaccinationSiteDto.districtId) {
+      if (+pagingVaccinationSiteDto.districtId) {
         whereOptions.districtId = pagingVaccinationSiteDto.districtId;
-        if (pagingVaccinationSiteDto.wardId)
+        if (+pagingVaccinationSiteDto.wardId)
           whereOptions.wardId = pagingVaccinationSiteDto.wardId;
       }
     }

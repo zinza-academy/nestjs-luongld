@@ -24,7 +24,7 @@ export class AuthService {
   ) {}
 
   async validateUser(signInDto: SignInDto): Promise<any> {
-    const user = await this.userService.findOneByName(signInDto.userName);
+    const user = await this.userService.findOneByEmail(signInDto.email);
 
     const match = await bcrypt.compare(signInDto.password, user.password);
     if (user && match) {
@@ -39,13 +39,14 @@ export class AuthService {
 
   async login(signInDto: SignInDto) {
     const user = await this.validateUser(signInDto);
-    const payload = { id: user.id, username: user.userName };
+    const payload = { id: user.id, username: user.userName, role: user.role };
     const jwtOptions = {
       expiresIn: process.env.ACCESS_TOKEN_EXPIRE,
       secret: process.env.ACCESS_TOKEN_SECRET,
     };
     return {
       access_token: await this.jwtService.signAsync(payload, jwtOptions),
+      user,
     };
   }
 
@@ -101,7 +102,7 @@ export class AuthService {
       to: forgotPasswordDto.email,
       subject: 'Đặt lại mật khẩu',
       username: user.userName,
-      resetPasswordUrl: `${process.env.BASE_URL}/reset-password?token=${resetPasswordToken}`,
+      resetPasswordUrl: `${process.env.BASE_URL_CLIENT}/auth/resetPassword?token=${resetPasswordToken}`,
     };
     await this.sendMailForgotPassword(mailOptions);
 
@@ -151,7 +152,7 @@ export class AuthService {
     user.password = hashNewPassword;
     user.resetPasswordToken = '';
     await this.userRepository.save(user);
-    return { message: 'reset password success' };
+    return { message: 'Thay đổi mật khẩu thành công!' };
   }
 
   async updatePassword(id: number, updatePasswordDto: UpdatePasswordDto) {

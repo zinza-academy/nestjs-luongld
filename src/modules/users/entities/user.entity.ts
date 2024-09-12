@@ -2,6 +2,7 @@ import { District } from '@modules/import-excel/entities/district.entity';
 import { Province } from '@modules/import-excel/entities/province.entity';
 import { Ward } from '@modules/import-excel/entities/ward.entity';
 import { VaccineRegistration } from '@modules/vaccine-registrations/entities/vaccine-registration.entity';
+import { VaccineResult } from '@modules/vaccine-result/entities/vaccine-result.entity';
 import { Role } from '@src/common/enum/role.enum';
 import {
   Entity,
@@ -29,7 +30,7 @@ export class User {
   citizenId: string;
 
   @Column()
-  gender: string;
+  gender: number;
 
   @Column()
   provinceId: number;
@@ -48,6 +49,9 @@ export class User {
 
   @Column({ type: 'enum', enum: Role, default: Role.User })
   role: Role;
+
+  @OneToMany(() => VaccineResult, (vaccineResult) => vaccineResult.user)
+  vaccineResults: VaccineResult[];
 
   @OneToMany(
     () => VaccineRegistration,

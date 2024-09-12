@@ -12,4 +12,8 @@ export class CreateVaccineResultDto {
   @IsNumber()
   @IsNotEmpty()
   vaccinationSiteId: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  userId: number;
 }
